@@ -42,7 +42,7 @@ public class Crud {
             System.out.print("추가할 이름: ");
             sc.nextLine();
             user.setName(sc.nextLine());
-            System.out.print("추가할 생년월일: "); // TODO: yyyy-MM-dd
+            System.out.print("추가할 생년월일: ");
             Date date = null;
             String dateFormat = "yyyy-MM-dd";
             String dateString = sc.nextLine();
@@ -77,7 +77,7 @@ public class Crud {
                 // parameter 설정
                 stmt.setString(1, user.getId());
                 stmt.setString(2, user.getName());
-                stmt.setDate(3, user.getBirth()); // TODO: Date type으로 insert
+                stmt.setDate(3, user.getBirth());
                 stmt.setString(4, user.getAddress());
                 stmt.setString(5, user.getJob());
                 stmt.executeUpdate();
