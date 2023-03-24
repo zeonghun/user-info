@@ -48,8 +48,18 @@ public class Delete {
             try (
                 Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/user_info", "root", "1234");
                 PreparedStatement stmt = con.prepareStatement("DELETE FROM phone WHERE phone_number = ?");) {
-                System.out.print("삭제할 전화번호(-포함): ");
-                String phone_number = sc.next();
+                System.out.print("삭제할 전화번호: ");
+                sc.nextLine();
+                String phone_number = sc.nextLine();
+                if(phone_number.contains("-")) {
+                    phone_number = phone_number.replace("-","");
+                } else if(phone_number.contains(".")){
+                    phone_number = phone_number.replace(".","");
+                } else if(phone_number.contains("/")){
+                    phone_number = phone_number.replace("/","");
+                } else if(phone_number.contains(".")){
+                    phone_number = phone_number.replace(" ","");
+                }
                 // parameter 설정
                 stmt.setString(1, phone_number);
                 stmt.executeUpdate();

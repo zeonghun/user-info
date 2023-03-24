@@ -72,8 +72,18 @@ public class Insert {
                     PreparedStatement stmt = con.prepareStatement("INSERT INTO phone(user_id, phone_number ) VALUES(?, ?)");) {
                 System.out.print("번호를 추가할 아이디: ");
                 String user_id = sc.next();
-                System.out.print("추가할 전화번호(-포함): "); // TODO: XXX-XXXX-XXXX
-                String phone_number = sc.next();
+                System.out.print("추가할 전화번호: ");
+                sc.nextLine();
+                String phone_number = sc.nextLine();
+                if(phone_number.contains("-")) {
+                    phone_number = phone_number.replace("-","");
+                } else if(phone_number.contains(".")){
+                    phone_number = phone_number.replace(".","");
+                } else if(phone_number.contains("/")){
+                    phone_number = phone_number.replace("/","");
+                } else if(phone_number.contains(".")){
+                    phone_number = phone_number.replace(" ","");
+                }
                 // parameter 설정
                 stmt.setString(1, user_id);
                 stmt.setString(2, phone_number);
