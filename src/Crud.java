@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * INSERT, UPDATE, DELETE, READ
@@ -40,7 +43,17 @@ public class Crud {
             sc.nextLine();
             user.setName(sc.nextLine());
             System.out.print("추가할 생년월일: "); // TODO: yyyy-MM-dd
-            user.setBirth(sc.nextLine());
+            Date date = null;
+            String dateFormat = "yyyy-MM-dd";
+            String dateString = sc.nextLine();
+            SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+            try {
+                date = new Date(formatter.parse(dateString).getTime());
+            } catch (ParseException e) {
+                System.err.println("잘못된 형식입니다");
+                e.printStackTrace();
+            }
+            user.setBirth(date);
             System.out.print("추가할 주소: ");
             // sc.nextLine();
             user.setAddress(sc.nextLine());
@@ -64,7 +77,7 @@ public class Crud {
                 // parameter 설정
                 stmt.setString(1, user.getId());
                 stmt.setString(2, user.getName());
-                stmt.setString(3, user.getBirth()); // TODO: Date type으로 insert
+                stmt.setDate(3, user.getBirth()); // TODO: Date type으로 insert
                 stmt.setString(4, user.getAddress());
                 stmt.setString(5, user.getJob());
                 stmt.executeUpdate();
@@ -150,14 +163,24 @@ public class Crud {
             System.out.print("생년월일을 변경할 아이디: ");
             user.setId(sc.next());
             System.out.print("변경할 생년월일: ");
+            Date date = null;
+            String dateFormat = "yyyy-MM-dd";
             sc.nextLine();
-            user.setBirth(sc.nextLine());
+            String dateString = sc.nextLine();
+            SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+            try {
+                date = new Date(formatter.parse(dateString).getTime());
+            } catch (ParseException e) {
+                System.err.println("잘못된 형식입니다");
+                e.printStackTrace();
+            }
+            user.setBirth(date);
 
             try (
                 Connection con = DriverManager.getConnection(sqlConnection, "root", "1234");
                 PreparedStatement stmt = con.prepareStatement("UPDATE user SET birth = ? WHERE id = ?");) {
                 // parameter 설정
-                stmt.setString(1, user.getBirth());
+                stmt.setDate(1, user.getBirth());
                 stmt.setString(2, user.getId());
                 stmt.executeUpdate();
             } catch (SQLException e) {
@@ -291,31 +314,38 @@ public class Crud {
             e.printStackTrace();
         }
         try (
-                Connection con = DriverManager.getConnection(sqlConnection, "root", "1234");
-                // 실행할 Query 설정
-                PreparedStatement stmt1 = con.prepareStatement("SELECT * FROM user ORDER BY name ASC");
-                PreparedStatement stmt2 = con.prepareStatement("SELECT * FROM phone");
-                // Query 실행
-                ResultSet rs1 = stmt1.executeQuery();
-                ResultSet rs2 = stmt2.executeQuery();) {
-            System.out.println(
-                    "======================================== User Table ========================================");
-            while (rs1.next()) {
-                System.out.println("아이디: " + rs1.getString("id") + " / 이름: " + rs1.getString("name") + " / 생년월일: "
-                        + rs1.getString("birth") + " / 주소: " + rs1.getString("address") + " / 직업: "
-                        + rs1.getString("job"));
+            // Connection con = DriverManager.getConnection(sqlConnection, "root", "1234");
+            // // 실행할 Query 설정
+            // PreparedStatement stmt1 = con.prepareStatement("SELECT * FROM user ORDER BY name ASC");
+            // PreparedStatement stmt2 = con.prepareStatement("SELECT * FROM phone");
+            // // Query 실행
+            // ResultSet rs1 = stmt1.executeQuery();
+            // ResultSet rs2 = stmt2.executeQuery();) {
+            // System.out.println(
+            //         "======================================== User Table ========================================");
+            // while (rs1.next()) {
+            //     System.out.println("아이디: " + rs1.getString("id") + " / 이름: " + rs1.getString("name") + " / 생년월일: "+ rs1.getString("birth") + " / 주소: " + rs1.getString("address") + " / 직업: " + rs1.getString("job"));
+            // }
+            // System.out.println("============================================================================================");
+            // System.out.println();
+            // System.out.println();
+            // System.out.println("======================================= Phone Table ========================================");
+            // while (rs2.next()) {
+            //     System.out.println("아이디: " + rs2.getString("user_id") + " / 전화번호: " + rs2.getString("phone_number"));
+            // }
+            // System.out.println("============================================================================================");
+
+            Connection con = DriverManager.getConnection(sqlConnection, "root", "1234");
+            // 실행할 Query 설정
+            PreparedStatement stmt = con.prepareStatement("SELECT user.id, user.name, user.birth, user.address, user.job, phone.user_id, phone.phone_number FROM user LEFT OUTER JOIN phone ON user.id = phone.user_id ORDER BY user.name ASC");
+
+            // Query 실행
+            ResultSet rs = stmt.executeQuery();) {
+            System.out.println("============================================= User Information =============================================");
+            while (rs.next()) {
+                System.out.println("아이디: " + rs.getString("id") + " / 이름: " + rs.getString("name") + " / 생년월일: "+ rs.getString("birth") + " / 주소: " + rs.getString("address") + " / 직업: " + rs.getString("job") + " / 전화번호: " + rs.getString("phone_number"));
             }
-            System.out.println(
-                    "============================================================================================");
-            System.out.println();
-            System.out.println();
-            System.out.println(
-                    "======================================= Phone Table ========================================");
-            while (rs2.next()) {
-                System.out.println("아이디: " + rs2.getString("user_id") + " / 전화번호: " + rs2.getString("phone_number"));
-            }
-            System.out.println(
-                    "============================================================================================");
+            System.out.println("============================================================================================================");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -325,6 +355,7 @@ public class Crud {
      * 입력받은 전화번호에서 특정 문자를 제거하는 메소드
      * 
      * @param phoneNumber 입력받은 전화번호
+     * 
      * @return 특정 문자를 제거한 전화번호
      * 
      * @author zeonghun

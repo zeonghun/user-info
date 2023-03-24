@@ -1,7 +1,9 @@
+import java.sql.Date;
+
 public class User {
     private String id;
     private String name;
-    private String birth;
+    private Date birth;
     private String address;
     private String job;
 
@@ -21,11 +23,11 @@ public class User {
         this.name = name;
     }
 
-    public String getBirth() {
+    public Date getBirth() {
         return this.birth;
     }
 
-    public void setBirth(String birth) {
+    public void setBirth(Date birth) {
         this.birth = birth;
     }
 
