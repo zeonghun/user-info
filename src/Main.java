@@ -6,16 +6,13 @@ public class Main {
      * (non-javadoc)
      * 
      * @author zeonghun
-     * @since 230323
+     * @since 230324
      */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Insert insert = new Insert();
-        Update update = new Update();
-        Delete delete = new Delete();
-        Read read = new Read();
+        Crud crud = new Crud();
 
-        int num;
+        int index;
 
         do {
             try {
@@ -28,21 +25,21 @@ public class Main {
                 System.out.println();
                 System.out.print("항목 선택: ");
 
-                num = sc.nextInt();
+                index = sc.nextInt();
 
                 System.out.println();
-                switch (num) {
+                switch (index) {
                     case 1:
-                        insert.insert();
+                        crud.insert();
                         break;
                     case 2:
-                        update.update();
+                        crud.update();
                         break;
                     case 3:
-                        delete.delete();
+                        crud.delete();
                         break;
                     case 4:
-                        read.read();
+                        crud.read();
                         break;
                     case 5:
                         System.out.println("종료합니다");
@@ -53,9 +50,9 @@ public class Main {
                 }
             } catch (InputMismatchException ime) {
                 System.err.println("숫자만 입력해주세요!");
-                num = 1;
+                index = 1;
             }
-        } while (num != 5);
+        } while (index != 5);
         sc.close();
     }
 }
