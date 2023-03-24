@@ -33,7 +33,8 @@ public class Update {
                 System.out.print("이름을 변경할 아이디: ");
                 String id = sc.next();
                 System.out.print("변경할 이름: ");
-                String name = sc.next();
+                sc.nextLine();
+                String name = sc.nextLine();
                 // parameter 설정
                 stmt.setString(1, name);
                 stmt.setString(2, id);
@@ -48,7 +49,8 @@ public class Update {
                 System.out.print("생년월일을 변경할 아이디: ");
                 String id = sc.next();
                 System.out.print("변경할 생년월일: ");
-                String birth = sc.next();
+                sc.nextLine();
+                String birth = sc.nextLine();
                 // parameter 설정
                 stmt.setString(1, birth);
                 stmt.setString(2, id);
@@ -65,6 +67,9 @@ public class Update {
                 System.out.print("변경할 주소: ");
                 sc.nextLine();
                 String address = sc.nextLine();
+                if (address.equals("")  || address.equals(" ")) {
+                    address = "null";
+                }
                 // parameter 설정
                 stmt.setString(1, address);
                 stmt.setString(2, id);
@@ -79,7 +84,11 @@ public class Update {
                 System.out.print("직업을 변경할 아이디: ");
                 String id = sc.next();
                 System.out.print("변경할 직업: ");
-                String job = sc.next();
+                sc.nextLine();
+                String job = sc.nextLine();
+                if (job.equals("")  || job.equals(" ")) {
+                    job = "null";
+                }
                 // parameter 설정
                 stmt.setString(1, job);
                 stmt.setString(2, id);

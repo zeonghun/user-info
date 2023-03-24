@@ -33,14 +33,21 @@ public class Insert {
                 String id = sc.next();
                 // user.setId(sc.next());
                 System.out.print("추가할 이름: ");
-                String name = sc.next();
-                System.out.print("추가할 생년월일: "); // TODO: yyyy-MM-dd
-                String birth = sc.next();
-                System.out.print("추가할 주소: ");
                 sc.nextLine();
+                String name = sc.nextLine();
+                System.out.print("추가할 생년월일: "); // TODO: yyyy-MM-dd
+                String birth = sc.nextLine();
+                System.out.print("추가할 주소: ");
+                //sc.nextLine();
                 String address = sc.nextLine();
+                if (address.equals("")  || address.equals(" ")) {
+                    address = "null";
+                }
                 System.out.print("추가할 직업: ");
-                String job = sc.next();
+                String job = sc.nextLine();
+                if (job.equals("")  || job.equals(" ")) {
+                    job = "null";
+                }
                 // user <-- id, name
 
                 // parameter 설정
